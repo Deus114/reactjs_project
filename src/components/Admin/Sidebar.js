@@ -15,7 +15,7 @@ import sidebarBg from '../../assets/bg2.jpg';
 import { DiReact } from 'react-icons/di'
 import { MdDashboard } from 'react-icons/md'
 import { Link } from "react-router-dom";
-
+import './SideBar.scss'
 
 const SideBar = (props) => {
     const { collapsed, toggled, handleToggleSidebar } = props;

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FcPlus } from 'react-icons/fc';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import { postCreateNewUser } from '../../../services/apiService'
 
 const ModalCreateUser = (props) => {
     const { show, setShow } = props;
@@ -30,19 +31,36 @@ const ModalCreateUser = (props) => {
         }
     }
 
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
     const handleSubmit = async () => {
         // Validate
+        let isValidEmail = validateEmail(email);
+        if (!isValidEmail) {
+            toast.error('Invalid Email');
+            return;
+        }
+
+        if (!password) {
+            toast.error('Invalid Password');
+            return;
+        }
 
         // call API
-        const data = new FormData();
-        data.append('email', email);
-        data.append('password', password);
-        data.append('username', username);
-        data.append('role', role);
-        data.append('userImage', image);
-
-        let res = await axios.post('http://localhost:8081/api/v1/participant', data);
-        console.log('>>>: ', res);
+        let res = await postCreateNewUser(email, password, username, role, image);
+        if (res && res.EC === 0) {
+            toast.success(res.EM);
+            handleClose();
+        }
+        if (res && res.EC !== 0) {
+            toast.error(res.EM);
+        }
     }
 
     return (
@@ -79,8 +97,8 @@ const ModalCreateUser = (props) => {
                         </div>
                         <div className="col-md-6">
                             <label className="form-label">Role</label>
-                            <select className="form-select" onChange={(event) => setRole(event.target.value)}>
-                                <option selected value="ADMIN">USER</option>
+                            <select defaultValue="USER" className="form-select" onChange={(event) => setRole(event.target.value)}>
+                                <option value="USER">USER</option>
                                 <option value="ADMIN">ADMIN</option>
                             </select>
                         </div>
