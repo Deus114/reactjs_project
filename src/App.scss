@@ -77,10 +77,12 @@ body {
 
       .title-3 {
         button {
+          border-radius: 5px;
           padding: 0 15px;
           background-color: rgb(30, 30, 30);
           color: white;
           height: 40px;
+          border: none;
 
           &:hover {
             background-color: black;

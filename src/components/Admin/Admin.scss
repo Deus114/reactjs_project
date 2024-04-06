@@ -7,4 +7,21 @@
         }
     }
 
+    .admin-content {
+        width: 100%;
+
+        .admin-header {
+            margin-left: 1%;
+
+            .side-toggle {
+                cursor: pointer;
+
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+        }
+
+        // .admin-main {}
+    }
 }
