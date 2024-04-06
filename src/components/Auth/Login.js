@@ -3,23 +3,31 @@ import './Login.scss';
 import { useNavigate } from 'react-router-dom';
 import { postLogin } from '../../services/apiService'
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux'
+import { doLogin } from '../../redux/action/userAction';
+import { FaSpinner } from "react-icons/fa";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogin = async () => {
         // Validate
-
+        setIsLoading(true);
         // Api
         let res = await postLogin(email, password);
         if (res && res.EC === 0) {
+            dispatch(doLogin(res));
             toast.success(res.EM);
+            setIsLoading(false);
             navigate('/')
         }
         if (res && res.EC !== 0) {
             toast.error(res.EM);
+            setIsLoading(false);
         }
     }
 
@@ -52,7 +60,9 @@ const Login = () => {
                 </div>
                 <span>Forgot password?</span>
                 <div>
-                    <button onClick={() => handleLogin()}>Login</button>
+                    <button onClick={() => handleLogin()} disabled={isLoading}>
+                        {isLoading === true && <FaSpinner className='loader-icon' />}
+                        <span>Login</span></button>
                 </div>
                 <div>
                     <span className='back'

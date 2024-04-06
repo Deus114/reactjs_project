@@ -1,8 +1,12 @@
 import videoHomepage from '../../assets/video-homepage.mp4'
 import { useNavigate } from 'react-router-dom'
+// import {useSelector} from 'react-redux'
 
 const Homepage = () => {
     const navigate = useNavigate();
+    // const account =useSelector(state => state.user.account)
+    // const isAuthenticated =useSelector(state => state.user.isAuthenticated)
+
     const handleGetstart = () => {
         navigate('/login');
     }
